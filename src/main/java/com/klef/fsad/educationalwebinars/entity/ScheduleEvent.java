@@ -1,6 +1,6 @@
 package com.klef.fsad.educationalwebinars.entity;
 
-public class Student 
+public class ScheduleEvent 
 {
-
+	
 }

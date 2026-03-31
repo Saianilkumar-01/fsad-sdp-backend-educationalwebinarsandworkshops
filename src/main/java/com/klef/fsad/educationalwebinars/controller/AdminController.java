@@ -1,5 +1,6 @@
 package com.klef.fsad.educationalwebinars.controller;
 
-public class AdminController {
-
+public class AdminController 
+{
+	
 }
