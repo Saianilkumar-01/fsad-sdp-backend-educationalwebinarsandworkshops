@@ -8,6 +8,7 @@ public class Sdp38EducationalWebinarApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Sdp38EducationalWebinarApplication.class, args);
+		System.out.println("This is SDP Project");
 	}
 
 }
