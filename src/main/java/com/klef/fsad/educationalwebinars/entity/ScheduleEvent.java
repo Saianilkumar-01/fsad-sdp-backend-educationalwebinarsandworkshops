@@ -46,7 +46,7 @@ public class ScheduleEvent
 	}
 
 	public String getEventType() {
-		return eventType;
+	    return eventType;
 	}
 
 	public void setEventType(String eventType) {
