@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.klef.fsad.educationalwebinars.entity.Admin;
-import com.klef.fsad.educationalwebinars.entity.ManageEvents;
 import com.klef.fsad.educationalwebinars.entity.ScheduleEvent;
 import com.klef.fsad.educationalwebinars.entity.StudentResources;
 import com.klef.fsad.educationalwebinars.service.AdminService;
