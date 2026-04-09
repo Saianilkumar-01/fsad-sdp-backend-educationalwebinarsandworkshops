@@ -17,13 +17,24 @@ public class StudentServiceImpl implements StudentService{
 	@Override
 	public Student verifystudentlogin(String username, String password) {
 		return studentrepo.findByUsernameAndPassword(username, password);
+		
 	}
 
 	@Override
-	public String studentRegistration(Student student) {
-		studentrepo.save(student);
-		return "Student Registered Successfully";
-	}
+//	public String studentRegistration(Student student) {
+//		studentrepo.save(student);
+//		return "Student Registered Successfully";
+//	}
+	
+	 public String studentRegistration(Student student) {
+		    if (studentrepo.existsByUsername(student.getUsername())
+		        || studentrepo.existsByEmail(student.getEmail())
+		        || studentrepo.existsByContact(student.getContact())) {
+		      throw new IllegalArgumentException("DUPLICATE_STUDENT");
+		    }
+		    studentrepo.save(student);
+		    return "Student Registered Successfully";
+		  }
 
 	@Override
 	public String updateprofile(Student student) {

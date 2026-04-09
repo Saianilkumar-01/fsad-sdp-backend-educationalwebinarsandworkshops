@@ -30,19 +30,34 @@ public class StudentController {
 		return "student home";
 	}
 	
-	@PostMapping("/registration")
-	public ResponseEntity<String> studentregistration(@RequestBody Student s)
-	{
-		try
-		{
-			String output=studentservice.studentRegistration(s);
-			return ResponseEntity.status(201).body(output);
-		}
-		catch(Exception e)
-		{
-			 return ResponseEntity.status(500).body("Internal Server Error");
-		}
-	}
+//	@PostMapping("/registration")
+//	public ResponseEntity<String> studentregistration(@RequestBody Student s)
+//	{
+//		try
+//		{
+//			String output=studentservice.studentRegistration(s);
+//			return ResponseEntity.status(201).body(output);
+//		}
+//		catch(Exception e)
+//		{
+//			 return ResponseEntity.status(500).body("Internal Server Error");
+//		}
+//	}
+	  @PostMapping("/registration")
+	  public ResponseEntity<String> studentregistration(@RequestBody Student s) {
+	    try {
+	      String output = studentservice.studentRegistration(s);
+	      return ResponseEntity.status(201).body(output);
+	    } catch (IllegalArgumentException ex) {
+	      if ("DUPLICATE_STUDENT".equals(ex.getMessage())) {
+	        return ResponseEntity.status(409).body("Account already exists");
+	      }
+	      return ResponseEntity.status(400).body("Bad Request");
+	    } catch (Exception e) {
+	      return ResponseEntity.status(500).body("Internal Server Error");
+	    }
+	  }
+
 	
 	@PostMapping("/login")
 	public ResponseEntity<?> verifystudentlogin(@RequestBody Student student)

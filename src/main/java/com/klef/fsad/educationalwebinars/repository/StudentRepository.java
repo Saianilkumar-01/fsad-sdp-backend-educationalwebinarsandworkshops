@@ -9,4 +9,8 @@ import com.klef.fsad.educationalwebinars.entity.Student;
 public interface StudentRepository extends JpaRepository<Student, String>
 {
     public Student findByUsernameAndPassword(String username, String password);
+    
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
+    boolean existsByContact(String contact);
 }

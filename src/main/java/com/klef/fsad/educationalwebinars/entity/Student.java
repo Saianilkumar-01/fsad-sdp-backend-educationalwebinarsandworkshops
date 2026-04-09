@@ -16,11 +16,11 @@ import jakarta.persistence.Table;
 public class Student 
 {
 	@Id
-	@Column(length = 50)
+	@Column(length = 50,unique=true)
 	private String username;
 	@Column(length = 50 , nullable = false)
 	private String password;
-	@Column(length = 50)
+	@Column(length = 50,unique=true)
     private String email;
 	 @Column(nullable = false, length = 50)
 	 private String name;
