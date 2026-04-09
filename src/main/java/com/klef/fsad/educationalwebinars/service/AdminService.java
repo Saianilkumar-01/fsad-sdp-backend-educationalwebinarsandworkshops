@@ -22,6 +22,9 @@ public interface AdminService
     
     // EVENTS
     public String addEvent(ScheduleEvent scheduleEvent);
+
+    // ADMIN MANAGEMENT (no public registration UI expected)
+    public String addAdmin(Admin admin);
     
     // RESOURCES
     public String addResource(StudentResources resource);

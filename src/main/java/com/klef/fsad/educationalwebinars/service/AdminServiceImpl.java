@@ -83,6 +83,13 @@ public class AdminServiceImpl implements AdminService
         return "Event Added Successfully";
     }
 
+    // ================= ADMIN MANAGEMENT =================
+    @Override
+    public String addAdmin(Admin admin) {
+        adminRepository.save(admin);
+        return "Admin Created Successfully";
+    }
+
     // ================= RESOURCES =================
     @Override
     public String addResource(StudentResources resource) 

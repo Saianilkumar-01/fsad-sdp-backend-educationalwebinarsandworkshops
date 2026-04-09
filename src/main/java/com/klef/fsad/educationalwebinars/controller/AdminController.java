@@ -27,14 +27,37 @@ public class AdminController
 
     // ================= LOGIN =================
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password)
+    public ResponseEntity<?> login(@RequestBody Admin adminReq)
     {
-        Admin admin = adminService.verifyAdminLogin(username, password);
-        
-        if(admin != null)
-            return ResponseEntity.ok(admin);
-        else
-            return ResponseEntity.status(401).body("Invalid Credentials");
+        try
+        {
+            Admin admin = adminService.verifyAdminLogin(adminReq.getUsername(), adminReq.getPassword());
+
+            if(admin != null)
+                return ResponseEntity.status(200).body("login success");
+            else
+                return ResponseEntity.status(401).body("invalid credentials");
+        }
+        catch(Exception e)
+        {
+            return ResponseEntity.status(500).body("Internal Server Error");
+        }
+    }
+
+    // Create admin credentials (use Postman to add specific admin). This acts like a registration
+    // but keep it restricted in production. For now it simply inserts the admin into the DB.
+    @PostMapping("/create")
+    public ResponseEntity<String> createAdmin(@RequestBody Admin admin)
+    {
+        try
+        {
+            String output = adminService.addAdmin(admin);
+            return ResponseEntity.status(201).body(output);
+        }
+        catch(Exception e)
+        {
+            return ResponseEntity.status(500).body("Internal Server Error");
+        }
     }
 
     // ================= DASHBOARD =================
