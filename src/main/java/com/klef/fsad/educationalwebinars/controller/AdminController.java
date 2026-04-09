@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.klef.fsad.educationalwebinars.entity.Admin;
+import com.klef.fsad.educationalwebinars.entity.ManageEvents;
 import com.klef.fsad.educationalwebinars.entity.ScheduleEvent;
 import com.klef.fsad.educationalwebinars.entity.StudentResources;
 import com.klef.fsad.educationalwebinars.service.AdminService;
@@ -94,9 +95,56 @@ public class AdminController
     }
 
     @GetMapping("/manageevents")
-    public ResponseEntity<List<ManageEvents>> viewAllManageEvents()
+    public ResponseEntity<List<java.util.Map<String, Object>>> viewAllManageEvents()
     {
-        return ResponseEntity.ok(adminService.viewAllManageEvents());
+        List<ManageEvents> manageEvents = adminService.viewAllManageEvents();
+        List<ScheduleEvent> scheduleEvents = adminService.viewAllEvents();
+
+        List<java.util.Map<String, Object>> result = new java.util.ArrayList<>();
+        for(ScheduleEvent se : scheduleEvents) {
+            java.util.Map<String, Object> map = new java.util.HashMap<>();
+            map.put("eventId", se.getId());
+            map.put("title", se.getTitle());
+            map.put("category", se.getCategory());
+            map.put("eventType", se.getEventType());
+            map.put("date", se.getDate());
+            map.put("time", se.getTime());
+            map.put("duration", se.getDuration());
+            map.put("instructorName", se.getInstructorName());
+
+            boolean foundManageEntity = false;
+            for(ManageEvents me : manageEvents) {
+                if(me.getEventId() == se.getId()) {
+                    map.put("id", me.getId()); // ManageEvents primary key
+                    map.put("status", me.getStatus());
+                    map.put("approvalStatus", me.getApprovalStatus());
+                    map.put("remarks", me.getRemarks());
+                    foundManageEntity = true;
+                    break;
+                }
+            }
+            
+            // If the event was created without a manage event record, give it defaults
+            if(!foundManageEntity) {
+                map.put("id", -1);
+                map.put("status", "UPCOMING");
+                map.put("approvalStatus", "PENDING");
+                map.put("remarks", "");
+            }
+            result.add(map);
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/deleteevent/{id}")
+    public ResponseEntity<String> deleteEvent(@PathVariable int id)
+    {
+        boolean deleted = adminService.deleteEvent(id);
+        if(deleted) {
+            return ResponseEntity.ok("Event deleted successfully");
+        } else {
+            return ResponseEntity.status(404).body("Event not found");
+        }
     }
 
     // ================= RESOURCES =================

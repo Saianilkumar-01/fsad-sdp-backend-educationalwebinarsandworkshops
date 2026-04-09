@@ -26,6 +26,8 @@ public interface AdminService
     public List<ScheduleEvent> viewAllEvents();
     public List<ScheduleEvent> viewEventsByCategory(String category);
     public List<ManageEvents> viewAllManageEvents();
+    
+    public boolean deleteEvent(int eventId);
 
     // ADMIN MANAGEMENT (no public registration UI expected)
     public String addAdmin(Admin admin);

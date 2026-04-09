@@ -115,6 +115,23 @@ public class AdminServiceImpl implements AdminService
         return manageEventsRepository.findAll();
     }
 
+    @Override
+    public boolean deleteEvent(int eventId) 
+    {
+        if (eventRepository.existsById(eventId)) 
+        {
+            // First delete associated ManageEvents records
+            List<ManageEvents> manageEventsList = manageEventsRepository.findByEventId(eventId);
+            if (!manageEventsList.isEmpty()) {
+                manageEventsRepository.deleteAll(manageEventsList);
+            }
+            // Then delete the main ScheduleEvent
+            eventRepository.deleteById(eventId);
+            return true;
+        }
+        return false;
+    }
+
     // ================= ADMIN MANAGEMENT =================
     @Override
     public String addAdmin(Admin admin) {
