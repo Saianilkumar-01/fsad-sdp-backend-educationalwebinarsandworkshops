@@ -3,6 +3,7 @@ package com.klef.fsad.educationalwebinars.service;
 import java.util.List;
 
 import com.klef.fsad.educationalwebinars.entity.Admin;
+import com.klef.fsad.educationalwebinars.entity.ManageEvents;
 import com.klef.fsad.educationalwebinars.entity.ScheduleEvent;
 import com.klef.fsad.educationalwebinars.entity.StudentResources;
 
@@ -22,6 +23,9 @@ public interface AdminService
     
     // EVENTS
     public String addEvent(ScheduleEvent scheduleEvent);
+    public List<ScheduleEvent> viewAllEvents();
+    public List<ScheduleEvent> viewEventsByCategory(String category);
+    public List<ManageEvents> viewAllManageEvents();
 
     // ADMIN MANAGEMENT (no public registration UI expected)
     public String addAdmin(Admin admin);

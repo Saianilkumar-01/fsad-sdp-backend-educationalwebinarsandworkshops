@@ -21,8 +21,6 @@ public class ManageEvents
 
     private String remarks;
 
-    // ================= GETTERS & SETTERS =================
-
     public int getId() {
         return id;
     }

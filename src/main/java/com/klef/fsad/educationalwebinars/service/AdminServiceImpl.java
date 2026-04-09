@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.klef.fsad.educationalwebinars.entity.Admin;
+import com.klef.fsad.educationalwebinars.entity.ManageEvents;
 import com.klef.fsad.educationalwebinars.entity.ScheduleEvent;
 import com.klef.fsad.educationalwebinars.entity.StudentResources;
 import com.klef.fsad.educationalwebinars.repository.AdminRepository;
+import com.klef.fsad.educationalwebinars.repository.ManageEventsRepository;
 import com.klef.fsad.educationalwebinars.repository.ScheduleEventRepository;
 import com.klef.fsad.educationalwebinars.repository.ResourceRepository;
 
@@ -23,6 +25,9 @@ public class AdminServiceImpl implements AdminService
 
     @Autowired
     private ResourceRepository resourceRepository;
+
+    @Autowired
+    private ManageEventsRepository manageEventsRepository;
 
     // ================= LOGIN =================
     @Override
@@ -79,8 +84,35 @@ public class AdminServiceImpl implements AdminService
     @Override
     public String addEvent(ScheduleEvent scheduleEvent) 
     {
-        eventRepository.save(scheduleEvent);
+        ScheduleEvent saved = eventRepository.save(scheduleEvent);
+
+        // Auto-create a ManageEvents entry when event is added
+        ManageEvents manage = new ManageEvents();
+        manage.setEventId(saved.getId());
+        manage.setStatus("UPCOMING");
+        manage.setApprovalStatus("PENDING");
+        manage.setRemarks("");
+        manageEventsRepository.save(manage);
+
         return "Event Added Successfully";
+    }
+
+    @Override
+    public List<ScheduleEvent> viewAllEvents() 
+    {
+        return eventRepository.findAll();
+    }
+
+    @Override
+    public List<ScheduleEvent> viewEventsByCategory(String category) 
+    {
+        return eventRepository.findByCategory(category);
+    }
+
+    @Override
+    public List<ManageEvents> viewAllManageEvents() 
+    {
+        return manageEventsRepository.findAll();
     }
 
     // ================= ADMIN MANAGEMENT =================

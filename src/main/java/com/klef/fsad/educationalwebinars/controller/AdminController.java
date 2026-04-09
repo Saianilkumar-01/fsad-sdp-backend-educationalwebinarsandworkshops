@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.klef.fsad.educationalwebinars.entity.Admin;
+import com.klef.fsad.educationalwebinars.entity.ManageEvents;
 import com.klef.fsad.educationalwebinars.entity.ScheduleEvent;
 import com.klef.fsad.educationalwebinars.entity.StudentResources;
 import com.klef.fsad.educationalwebinars.service.AdminService;
@@ -79,6 +80,24 @@ public class AdminController
     public ResponseEntity<String> addEvent(@RequestBody ScheduleEvent event)
     {
         return ResponseEntity.ok(adminService.addEvent(event));
+    }
+
+    @GetMapping("/viewevents")
+    public ResponseEntity<List<ScheduleEvent>> viewAllEvents()
+    {
+        return ResponseEntity.ok(adminService.viewAllEvents());
+    }
+
+    @GetMapping("/viewevents/{category}")
+    public ResponseEntity<List<ScheduleEvent>> viewEventsByCategory(@PathVariable String category)
+    {
+        return ResponseEntity.ok(adminService.viewEventsByCategory(category));
+    }
+
+    @GetMapping("/manageevents")
+    public ResponseEntity<List<ManageEvents>> viewAllManageEvents()
+    {
+        return ResponseEntity.ok(adminService.viewAllManageEvents());
     }
 
     // ================= RESOURCES =================
