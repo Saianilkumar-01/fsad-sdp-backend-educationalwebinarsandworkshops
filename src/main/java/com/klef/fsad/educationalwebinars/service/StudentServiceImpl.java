@@ -46,4 +46,14 @@ public class StudentServiceImpl implements StudentService{
 		}
 	}
 
+	@Override
+	public Boolean deleteStudentaccount(String username) {
+		if(studentrepo.existsById(username))
+		{
+			studentrepo.deleteById(username);
+			return true;
+		}
+		return false;
+	}
+
 }
