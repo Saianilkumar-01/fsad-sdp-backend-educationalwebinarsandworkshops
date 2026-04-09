@@ -16,7 +16,11 @@ public class StudentServiceImpl implements StudentService{
 
 	@Override
 	public Student verifystudentlogin(String username, String password) {
-		return studentrepo.findByUsernameAndPassword(username, password);
+		Student s = studentrepo.findByUsernameAndPassword(username, password);
+		if(s == null) {
+			s = studentrepo.findByEmailAndPassword(username, password);
+		}
+		return s;
 	}
 
 	@Override
