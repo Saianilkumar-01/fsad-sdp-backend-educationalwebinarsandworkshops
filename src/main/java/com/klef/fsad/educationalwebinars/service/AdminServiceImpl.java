@@ -29,14 +29,12 @@ public class AdminServiceImpl implements AdminService
     @Autowired
     private ManageEventsRepository manageEventsRepository;
 
-    // ================= LOGIN =================
     @Override
     public Admin verifyAdminLogin(String username, String password) 
     {
         return adminRepository.findByUsernameAndPassword(username, password);
     }
 
-    // ================= DASHBOARD =================
     @Override
     public long getTotalWebinars() 
     {
@@ -58,14 +56,12 @@ public class AdminServiceImpl implements AdminService
     @Override
     public long getTotalRegistrations() 
     {
-        // If you don't have registration table yet
         return 0;
     }
 
     @Override
     public double getAttendanceRate() 
     {
-        // dummy logic (update later when attendance table added)
         return 75.0;
     }
 
@@ -80,13 +76,11 @@ public class AdminServiceImpl implements AdminService
         return (double) totalRegistrations / totalEvents;
     }
 
-    // ================= EVENTS =================
     @Override
     public String addEvent(ScheduleEvent scheduleEvent) 
     {
         ScheduleEvent saved = eventRepository.save(scheduleEvent);
 
-        // Auto-create a ManageEvents entry when event is added
         ManageEvents manage = new ManageEvents();
         manage.setEventId(saved.getId());
         manage.setStatus("UPCOMING");
@@ -120,26 +114,22 @@ public class AdminServiceImpl implements AdminService
     {
         if (eventRepository.existsById(eventId)) 
         {
-            // First delete associated ManageEvents records
             List<ManageEvents> manageEventsList = manageEventsRepository.findByEventId(eventId);
             if (!manageEventsList.isEmpty()) {
                 manageEventsRepository.deleteAll(manageEventsList);
             }
-            // Then delete the main ScheduleEvent
             eventRepository.deleteById(eventId);
             return true;
         }
         return false;
     }
 
-    // ================= ADMIN MANAGEMENT =================
     @Override
     public String addAdmin(Admin admin) {
         adminRepository.save(admin);
         return "Admin Created Successfully";
     }
 
-    // ================= RESOURCES =================
     @Override
     public String addResource(StudentResources resource) 
     {
@@ -164,7 +154,6 @@ public class AdminServiceImpl implements AdminService
         return false;
     }
 
-    // ================= ANALYTICS =================
     @Override
     public long countEventsByCategory(String category) 
     {
@@ -174,7 +163,6 @@ public class AdminServiceImpl implements AdminService
     @Override
     public List<Object[]> getMostPopularEvents() 
     {
-        // Placeholder (needs registration table later)
         return null;
     }
 }

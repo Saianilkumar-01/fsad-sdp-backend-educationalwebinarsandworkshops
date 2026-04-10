@@ -29,7 +29,7 @@ public interface AdminService
     
     public boolean deleteEvent(int eventId);
 
-    // ADMIN MANAGEMENT (no public registration UI expected)
+    // ADMIN MANAGEMENT 
     public String addAdmin(Admin admin);
     
     // RESOURCES
