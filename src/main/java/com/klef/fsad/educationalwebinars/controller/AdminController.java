@@ -26,7 +26,6 @@ public class AdminController
         return "Admin Controller is Working";
     }
 
-    // ================= LOGIN =================
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Admin adminReq)
     {
@@ -45,8 +44,6 @@ public class AdminController
         }
     }
 
-    // Create admin credentials (use Postman to add specific admin). This acts like a registration
-    // but keep it restricted in production. For now it simply inserts the admin into the DB.
     @PostMapping("/create")
     public ResponseEntity<String> createAdmin(@RequestBody Admin admin)
     {
@@ -61,7 +58,6 @@ public class AdminController
         }
     }
 
-    // ================= DASHBOARD =================
     @GetMapping("/dashboard")
     public ResponseEntity<?> getDashboard()
     {
@@ -75,7 +71,6 @@ public class AdminController
         });
     }
 
-    // ================= EVENTS =================
     @PostMapping("/addevent")
     public ResponseEntity<String> addEvent(@RequestBody ScheduleEvent event)
     {
@@ -115,7 +110,7 @@ public class AdminController
             boolean foundManageEntity = false;
             for(ManageEvents me : manageEvents) {
                 if(me.getEventId() == se.getId()) {
-                    map.put("id", me.getId()); // ManageEvents primary key
+                    map.put("id", me.getId());
                     map.put("status", me.getStatus());
                     map.put("approvalStatus", me.getApprovalStatus());
                     map.put("remarks", me.getRemarks());
@@ -124,7 +119,6 @@ public class AdminController
                 }
             }
             
-            // If the event was created without a manage event record, give it defaults
             if(!foundManageEntity) {
                 map.put("id", -1);
                 map.put("status", "UPCOMING");
@@ -147,7 +141,6 @@ public class AdminController
         }
     }
 
-    // ================= RESOURCES =================
     @PostMapping("/addresource")
     public ResponseEntity<String> addResource(@RequestBody StudentResources resource)
     {
@@ -171,7 +164,6 @@ public class AdminController
             return ResponseEntity.status(404).body("Resource Not Found");
     }
 
-    // ================= ANALYTICS =================
     @GetMapping("/eventcount")
     public ResponseEntity<Long> countByCategory(@RequestParam String category)
     {
