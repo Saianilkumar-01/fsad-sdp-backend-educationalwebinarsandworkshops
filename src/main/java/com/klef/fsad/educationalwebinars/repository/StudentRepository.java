@@ -10,6 +10,7 @@ public interface StudentRepository extends JpaRepository<Student, String>
 {
     public Student findByUsernameAndPassword(String username, String password);
     public Student findByEmailAndPassword(String email, String password);
+    public Student findByEmailIgnoreCase(String email);
     
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
