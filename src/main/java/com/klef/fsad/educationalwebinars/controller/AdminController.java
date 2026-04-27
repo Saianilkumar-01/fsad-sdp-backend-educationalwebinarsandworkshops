@@ -1,16 +1,21 @@
 package com.klef.fsad.educationalwebinars.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import com.klef.fsad.educationalwebinars.entity.Admin;
 import com.klef.fsad.educationalwebinars.entity.ManageEvents;
 import com.klef.fsad.educationalwebinars.entity.ScheduleEvent;
 import com.klef.fsad.educationalwebinars.entity.StudentResources;
+import com.klef.fsad.educationalwebinars.security.JwtUtil;
 import com.klef.fsad.educationalwebinars.service.AdminService;
+import com.klef.fsad.educationalwebinars.service.CustomUserDetailsService;
 
 @RestController
 @RequestMapping("/adminapi")
@@ -19,6 +24,12 @@ public class AdminController
 {
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
     
     @GetMapping("/")
     public String home()
@@ -34,7 +45,18 @@ public class AdminController
             Admin admin = adminService.verifyAdminLogin(adminReq.getUsername(), adminReq.getPassword());
 
             if(admin != null)
-                return ResponseEntity.status(200).body("login success");
+            {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(admin.getUsername());
+                String token = jwtUtil.generateToken(userDetails);
+
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "login success");
+                response.put("token", token);
+                response.put("username", admin.getUsername());
+                response.put("role", "ADMIN");
+
+                return ResponseEntity.status(200).body(response);
+            }
             else
                 return ResponseEntity.status(401).body("invalid credentials");
         }

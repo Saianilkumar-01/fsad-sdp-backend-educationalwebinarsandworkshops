@@ -1,9 +1,11 @@
 package com.klef.fsad.educationalwebinars.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.klef.fsad.educationalwebinars.entity.Student;
+import com.klef.fsad.educationalwebinars.security.JwtUtil;
+import com.klef.fsad.educationalwebinars.service.CustomUserDetailsService;
 import com.klef.fsad.educationalwebinars.service.StudentService;
 
 
@@ -26,6 +30,12 @@ public class StudentController {
 	
 	@Autowired
 	private StudentService studentservice;
+
+	@Autowired
+	private JwtUtil jwtUtil;
+
+	@Autowired
+	private CustomUserDetailsService userDetailsService;
 	
 	@GetMapping("/")
 	public String studenthome()
@@ -70,7 +80,18 @@ public class StudentController {
 			Student s=studentservice.verifystudentlogin(student.getUsername(), student.getPassword());
 			if(s!=null)
 			{
-				return ResponseEntity.status(200).body(s);
+				UserDetails userDetails = userDetailsService.loadUserByUsername(s.getUsername());
+				String token = jwtUtil.generateToken(userDetails);
+
+				Map<String, Object> response = new HashMap<>();
+				response.put("message", "login success");
+				response.put("token", token);
+				response.put("username", s.getUsername());
+				response.put("name", s.getName());
+				response.put("email", s.getEmail());
+				response.put("role", "STUDENT");
+
+				return ResponseEntity.status(200).body(response);
 		    }
 			else
 			{
