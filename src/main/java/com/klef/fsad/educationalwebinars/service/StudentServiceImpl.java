@@ -292,7 +292,9 @@ studentrepo.save(student);
 		for (ManageEvents manage : manageEvents) {
 			String approval = safeUpper(manage.getApprovalStatus());
 			String status = safeUpper(manage.getStatus());
-			boolean approved = approval.isEmpty() || "APPROVED".equals(approval);
+boolean approved = approval.isEmpty()
+|| "APPROVED".equals(approval)
+|| "PENDING".equals(approval);
 			boolean availableStatus = !"CANCELLED".equals(status) && !"REJECTED".equals(status);
 			if (approved && availableStatus) {
 				return true;
