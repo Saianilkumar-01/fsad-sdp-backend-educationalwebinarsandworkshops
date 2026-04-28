@@ -56,20 +56,31 @@ public class StudentController {
 //			 return ResponseEntity.status(500).body("Internal Server Error");
 //		}
 //	}
-	  @PostMapping("/registration")
-	  public ResponseEntity<String> studentregistration(@RequestBody Student s) {
-	    try {
-	      String output = studentservice.studentRegistration(s);
-	      return ResponseEntity.status(201).body(output);
-	    } catch (IllegalArgumentException ex) {
-	      if ("DUPLICATE_STUDENT".equals(ex.getMessage())) {
-	        return ResponseEntity.status(409).body("Account already exists");
-	      }
-	      return ResponseEntity.status(400).body("Bad Request");
-	    } catch (Exception e) {
-	      return ResponseEntity.status(500).body("Internal Server Error");
-	    }
-	  }
+  @PostMapping("/registration")
+  public ResponseEntity<?> studentregistration(@RequestBody Student s) {
+    try {
+      String output = studentservice.studentRegistration(s);
+      UserDetails userDetails = userDetailsService.loadUserByUsername(s.getUsername());
+      String token = jwtUtil.generateToken(userDetails);
+
+      Map<String, Object> response = new HashMap<>();
+      response.put("message", output);
+      response.put("token", token);
+      response.put("username", s.getUsername());
+      response.put("name", s.getName());
+      response.put("email", s.getEmail());
+      response.put("role", "STUDENT");
+
+      return ResponseEntity.status(201).body(response);
+    } catch (IllegalArgumentException ex) {
+      if ("DUPLICATE_STUDENT".equals(ex.getMessage())) {
+        return ResponseEntity.status(409).body("Account already exists");
+      }
+      return ResponseEntity.status(400).body("Bad Request");
+    } catch (Exception e) {
+      return ResponseEntity.status(500).body("Internal Server Error");
+    }
+  }
 
 	
 	@PostMapping("/login")

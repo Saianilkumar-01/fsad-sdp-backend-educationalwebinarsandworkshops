@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.klef.fsad.educationalwebinars.entity.ManageEvents;
@@ -43,28 +44,35 @@ public class StudentServiceImpl implements StudentService{
 	@Autowired
 	private StudentEventRegistrationRepository studentEventRegistrationRepository;
 
-	@Autowired(required = false)
-	private JavaMailSender mailSender;
+@Autowired(required = false)
+private JavaMailSender mailSender;
 
-	@Override
-	public Student verifystudentlogin(String username, String password) {
-		Student s = studentrepo.findByUsernameAndPassword(username, password);
-		if(s == null) {
-			s = studentrepo.findByEmailAndPassword(username, password);
-		}
-		return s;
-	}
+@Autowired
+private PasswordEncoder passwordEncoder;
 
-	@Override
-	 public String studentRegistration(Student student) {
-		    if (studentrepo.existsByUsername(student.getUsername())
-		        || studentrepo.existsByEmail(student.getEmail())
-		        || studentrepo.existsByContact(student.getContact())) {
-		      throw new IllegalArgumentException("DUPLICATE_STUDENT");
-		    }
-		    studentrepo.save(student);
-		    return "Student Registered Successfully";
-		  }
+@Override
+public Student verifystudentlogin(String username, String password) {
+Student s = studentrepo.findById(username).orElse(null);
+if(s == null) {
+s = studentrepo.findByEmailIgnoreCase(username);
+}
+if(s == null) {
+return null;
+}
+return passwordEncoder.matches(password, s.getPassword()) ? s : null;
+}
+
+@Override
+ public String studentRegistration(Student student) {
+    if (studentrepo.existsByUsername(student.getUsername())
+        || studentrepo.existsByEmail(student.getEmail())
+        || studentrepo.existsByContact(student.getContact())) {
+      throw new IllegalArgumentException("DUPLICATE_STUDENT");
+    }
+    student.setPassword(passwordEncoder.encode(student.getPassword()));
+    studentrepo.save(student);
+    return "Student Registered Successfully";
+  }
 
 	@Override
 	public String updateprofile(Student student) {
@@ -155,8 +163,8 @@ public class StudentServiceImpl implements StudentService{
 			throw new IllegalArgumentException("INVALID_OTP");
 		}
 
-		student.setPassword(newPassword);
-		studentrepo.save(student);
+student.setPassword(passwordEncoder.encode(newPassword));
+studentrepo.save(student);
 		otpStore.remove(normalizedEmail);
 
 		return "Password updated successfully";

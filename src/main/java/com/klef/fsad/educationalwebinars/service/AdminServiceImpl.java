@@ -11,8 +11,8 @@ import com.klef.fsad.educationalwebinars.entity.ScheduleEvent;
 import com.klef.fsad.educationalwebinars.entity.StudentResources;
 import com.klef.fsad.educationalwebinars.repository.AdminRepository;
 import com.klef.fsad.educationalwebinars.repository.ManageEventsRepository;
-import com.klef.fsad.educationalwebinars.repository.ScheduleEventRepository;
 import com.klef.fsad.educationalwebinars.repository.ResourceRepository;
+import com.klef.fsad.educationalwebinars.repository.ScheduleEventRepository;
 
 @Service
 public class AdminServiceImpl implements AdminService

@@ -39,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter
 
         // Allow CORS preflight requests
         if ("OPTIONS".equalsIgnoreCase(method)) {
-            response.setStatus(HttpServletResponse.SC_OK);
+            chain.doFilter(request, response);
             return;
         }
 

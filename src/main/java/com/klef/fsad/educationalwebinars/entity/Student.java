@@ -18,8 +18,8 @@ public class Student
 	@Id
 	@Column(length = 50,unique=true)
 	private String username;
-	@Column(length = 50 , nullable = false)
-	private String password;
+@Column(length = 255, nullable = false)
+private String password;
 	@Column(length = 50,unique=true)
     private String email;
 	 @Column(nullable = false, length = 50)
@@ -65,11 +65,11 @@ public class Student
 	 public void setRegisteredAt(LocalDateTime registeredAt) {
 		 this.registeredAt = registeredAt;
 	 }
-	 @Override
-	 public String toString() {
-		return "Student [username=" + username + ", password=" + password + ", email=" + email + ", name=" + name
-				+ ", contact=" + contact + ", registeredAt=" + registeredAt + "]";
-	 }
+ @Override
+ public String toString() {
+return "Student [username=" + username + ", email=" + email + ", name=" + name
++ ", contact=" + contact + ", registeredAt=" + registeredAt + "]";
+ }
 
 	
 }
