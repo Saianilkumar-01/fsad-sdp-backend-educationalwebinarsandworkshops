@@ -32,7 +32,12 @@ public class AdminServiceImpl implements AdminService
     @Override
     public Admin verifyAdminLogin(String username, String password) 
     {
-        return adminRepository.findByUsernameAndPassword(username, password);
+        String safeUsername = username == null ? "" : username.trim();
+        String safePassword = password == null ? "" : password.trim();
+        if (safeUsername.isEmpty() || safePassword.isEmpty()) {
+            return null;
+        }
+        return adminRepository.findByUsernameAndPassword(safeUsername, safePassword);
     }
 
     @Override
